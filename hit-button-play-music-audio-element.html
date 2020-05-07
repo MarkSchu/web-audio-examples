@@ -1,0 +1,55 @@
+<!DOCTYPE html>
+<html>
+<head>
+<title>Page Title</title>
+</head>
+<body>
+    <button onclick="play()">Play</button>
+</body>
+<script>
+
+    let musicArrayBuffer;
+    let audioDevices = [];
+
+    const loadMusicBuffer = () => {
+        fetch('Broke_For_Free_-_05_-_Something_Elated.mp3')
+        .then(response => {
+            return response.arrayBuffer();
+        })
+        .then(arrayBuffer => {
+            musicArrayBuffer = arrayBuffer
+        });
+    }
+
+    // 
+    const play = () => {
+        let audioContext = new AudioContext();
+        let audioEl = new Audio();
+        audioContext
+        .decodeAudioData(musicArrayBuffer)
+        .then((audioBuffer) => {
+            const source = audioContext.createBufferSource();
+            source.buffer = audioBuffer;
+            source.connect(audioContext.destination);
+            // source.start(); // play song!
+            audioEl.src = URL.createObjectURL(audioContext.destination);
+            audioEl.play();
+        });
+    }
+
+    window.onload = () => {
+        loadMusicBuffer();
+    }
+    
+    // var ac = new AudioContext();
+    // var o = ac.createOscillator();
+    // o.start();
+    // var dest = ac.createMediaStreamDestination();
+    // o.connect(dest);
+
+    // var audio = new Audio();
+    // audio.src = URL.createObjectURL(dest.stream);
+    // audio.play();
+
+</script>
+</html>
